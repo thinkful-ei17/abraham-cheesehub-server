@@ -6,6 +6,7 @@ const cheeseSchema= new mongoose.Schema({
 
 
 cheeseSchema.methods.serialize = () => ({
+  id: this._id,
   name: this.name
 });
 
