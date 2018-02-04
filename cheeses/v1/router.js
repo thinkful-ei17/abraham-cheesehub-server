@@ -9,9 +9,9 @@ router.use(jsonParser);
 mongoose.Promise = global.Promise;
 
 router.get('/cheeses', (req, res) => {
-  Cheese.find()
-  .then(cheeses => {
-    res.json(cheeses);
+  Cheese.find({})
+  .then(cheese => {
+    res.json(cheese);
   })
   .catch(error => {
     console.error(error);
@@ -22,18 +22,19 @@ router.get('/cheeses', (req, res) => {
 router.post('/cheeses', (req, res) => {
   if(!req.body.name){
     res.status(400).json({message: 'Missing required field: name'});
-  }
+  } else {
 
-  Cheese.create(req.body.name)
+    Cheese.create({name: req.body.name})
     .then(cheese => {
       if(cheese){
-        res.location(`${res.originalUrl}/${cheese.id}`).status(201).json(cheese);
+        res.location(`${res.originalUrl}/${cheese._id}`).status(201).json(cheese.serialize());
       }
     })
     .catch(error => {
       console.error(error);
       res.status(500).json({message: 'Internal Server Error'});
     });
+  }
 });
 
 module.exports = router;
