@@ -3,6 +3,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
+const cheesesRouter = require('./cheeses/v1/router');
 
 const {PORT, CLIENT_ORIGIN} = require('./config');
 const {dbConnect} = require('./db-mongoose');
@@ -23,45 +24,7 @@ app.use(
 );
 app.use(jsonParser);
 
-const cheesesDb =  [
-  'Bath Blue',
-  'Barkham Blue',
-  'Buxton Blue',
-  'Cheshire Blue',
-  'Devon Blue',
-  'Dorset Blue Vinney',
-  'Dovedale',
-  'Exmoor Blue',
-  'Harbourne Blue',
-  'Lanark Blue',
-  'Lymeswold',
-  'Oxford Blue',
-  'Shropshire Blue',
-  'Stichelton',
-  'Stilton',
-  'Blue Wensleydale',
-  'Yorkshire Blue'
-];
-
-app.get('/api/cheeses', (req, res) => {
-  return res.json(
-   cheesesDb
-  );
-});
-
-app.post('/api/cheeses', (req, res) =>{
-  console.log(req.body.cheese);
-  try{
-    if(req.body.cheese) {
-      cheesesDb.push(req.body.cheese);
-      res.status(201).json(req.body.cheese);
-    } else{
-      res.status(400).end();
-    }
-  } catch (err){
-    console.error(err);
-  }
-});
+app.use('/api', cheesesRouter);
 
 function runServer(port = PORT) {
   const server = app
