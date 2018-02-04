@@ -35,3 +35,5 @@ router.post('/cheeses', (req, res) => {
       res.status(500).json({message: 'Internal Server Error'});
     });
 });
+
+module.exports = router;
